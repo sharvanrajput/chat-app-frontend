@@ -11,7 +11,10 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <TooltipProvider>
         <HelmetProvider>
+          <div onContextMenu={(e)=> e.preventDefault()}>
+
           <App />
+          </div>
         </HelmetProvider>
       </TooltipProvider>
     </BrowserRouter>

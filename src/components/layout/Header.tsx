@@ -20,6 +20,7 @@ import {
   LogOut,
   Search,
   Settings,
+  Sheet,
   SidebarCloseIcon,
   SidebarOpenIcon,
   User,
@@ -32,6 +33,14 @@ import { useSidebar } from "../ui/sidebar";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import {
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
+import { Input } from "../ui/input";
 type DilogProviderProps = {
   Icon: LucideIcon;
   children: ReactNode;
@@ -51,7 +60,16 @@ export default function Header() {
         <Tooltip>
           <TooltipTrigger>
             <DilogProvider Icon={Search}>
-              <p>lorem </p>
+              <DialogHeader className="mb-3">
+                <DialogTitle>Search Friends</DialogTitle>
+              </DialogHeader>
+              <div className="relative">
+                <Input />
+                <Button className={"absolute right-0 bg-white text-black hover:bg-gray-100"}>
+                  {" "}
+                  <Search />{" "}
+                </Button>
+              </div>
             </DilogProvider>
           </TooltipTrigger>
           <TooltipContent>
@@ -121,7 +139,6 @@ export default function Header() {
               <DropdownMenuContent>
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    {" "}
                     <User /> Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem>

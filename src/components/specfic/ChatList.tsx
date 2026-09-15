@@ -1,63 +1,55 @@
-import { Link } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import type { chatType } from "../data/SampleData";
+import ChatItem from "./ChatItem";
 
-type Newmsgtype = {
+type newMessageAlertType = {
   chatId: string;
   count: number;
 };
 
-type ChatType = {
-  chats: [];
-  chadId: string;
-  onlineUsers: number;
-  newMessage: Newmsgtype[];
-  handleDeleteChat: () => void;
-};
-
-type chatitemtype = {
-  avatar: [];
-  name: string;
-  _id: string;
-  groupChat: boolean;
-  sameSender: boolean;
-  isOnline: boolean;
-  index: number;
-  newMessage: boolean;
-  handleDelchatOpen: () => void;
+type ChatItemType = {
+  chats: chatType[];
+  chatId?: string;
+  onlineUsers: string[];
+  newMessagesAlert?: newMessageAlertType[];
+  handleDeleteChat: (e: any, _id: String, groupChat: boolean) => void;
 };
 
 export default function ChatList({
-  chats,
-  chadId,
-  onlineUsers,
-  newMessage,
+  chats = [],
+  chatId,
+  onlineUsers = [],
+  newMessagesAlert = [
+    {
+      chatId: "as",
+      count: 0,
+    },
+  ],
   handleDeleteChat,
-}: ChatType) {
-  return <div><ChatItem /></div>;
-}
-
-const ChatItem = ({
-  avatar = [],
-  name,
-  _id,
-  groupChat = false,
-  sameSender,
-  isOnline,
-  newMessage,
-  index = 0,
-  handleDelchatOpen,
-}: chatitemtype) => {
+}: ChatItemType) {
   return (
-    <Link to={""}>
-      <div className="flex">
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <div>
-            <p>{name || "sharvan"}</p>
-        </div>
-      </div>
-    </Link>
+    <div>
+      {chats.map((data) => {
+        const { avatar, name, _id, groupChat, members } = data;
+        const newMessageAlert = newMessagesAlert.find(
+          ({ chatId }) => chatId === _id,
+        );
+        const isOnline = members?.some(() => onlineUsers.includes(_id));
+
+        return (
+          <ChatItem
+            index={1}
+            newMessageAlert={newMessageAlert}
+            isOnline={isOnline}
+            avatar={avatar}
+            name={name}
+            _id={_id}
+            key={_id}
+            groupChat={groupChat}
+            sameSander={chatId === _id}
+            handleDeleteChat={handleDeleteChat}
+          />
+        );
+      })}
+    </div>
   );
-};
+}

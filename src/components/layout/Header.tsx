@@ -1,13 +1,5 @@
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -16,11 +8,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Bell,
   LogOut,
   Search,
   Settings,
-  Sheet,
   SidebarCloseIcon,
   SidebarOpenIcon,
   User,
@@ -28,23 +27,21 @@ import {
   Users2,
   type LucideIcon,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useSidebar } from "../ui/sidebar";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import {
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
+import { useSidebar } from "../ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import UserItem from "../shared/UserItem";
+import { ScrollArea } from "../ui/scroll-area";
 type DilogProviderProps = {
   Icon: LucideIcon;
   children: ReactNode;
 };
+
+const user = [1, 2, 3, 4, 5];
+const handler = () => {};
 
 export default function Header() {
   const { toggleSidebar, open, openMobile } = useSidebar();
@@ -63,17 +60,32 @@ export default function Header() {
               <DialogHeader className="mb-3">
                 <DialogTitle>Search Friends</DialogTitle>
               </DialogHeader>
-              <div className="relative">
+              <div className="relative mb-2">
                 <Input />
-                <Button className={"absolute right-0 bg-white text-black hover:bg-gray-100"}>
-                  {" "}
-                  <Search />{" "}
+                <Button
+                  className={
+                    "absolute right-0 bg-white text-black hover:bg-gray-100"
+                  }
+                >
+                  <Search />
                 </Button>
               </div>
+
+              <ScrollArea className="h-[300px]  rounded-md border p-4">
+                <div className="space-y-2.5">
+                  {user.map((obj) => (
+                    <UserItem
+                      _id={"asdf"}
+                      handler={handler}
+                      handlerIsLoading={false}
+                    />
+                  ))}
+                </div>
+              </ScrollArea>
             </DilogProvider>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Add to library</p>
+            <p>Search</p>
           </TooltipContent>
         </Tooltip>
 

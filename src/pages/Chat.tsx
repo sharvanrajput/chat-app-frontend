@@ -1,8 +1,3 @@
-
 export default function Chat() {
-  return (
-    <div>
-chat
-    </div>
-  )
+  return <div>chat</div>;
 }

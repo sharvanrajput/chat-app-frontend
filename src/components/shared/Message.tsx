@@ -37,7 +37,7 @@ export default function Message({
             const file = fileFormat(url);
             return (
               <div key={index}>
-                <a href="" target="_blank"  rel="noopener noreferrer" download={url} className="text-black">
+                <a href="" target="_blank" download className="text-black">
                   {RanderAttachment(file, url)}
                 </a>
               </div>

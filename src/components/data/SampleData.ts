@@ -102,3 +102,69 @@ export const chats: chatType[] = [
     members: ["1", "3", "6", "9"],
   },
 ];
+
+
+type sampleUsersTypes = {
+  avatar: string;
+  name: string;
+  _id: string;
+};
+
+export const sampleUsers: sampleUsersTypes[] = [
+  {
+    avatar: "https://github.com/shadcn.png",
+    name: "Sharvan",
+    _id: "1",
+
+  },
+  {
+    avatar: "https://i.pravatar.cc/150?img=1",
+    name: "rahul",
+    _id: "2",
+
+  },
+  {
+    avatar: "https://github.com/shadcn.png",
+    name: "Sharvan",
+    _id: "3",
+
+  },
+  {
+    avatar: "https://i.pravatar.cc/150?img=1",
+    name: "rahul",
+    _id: "4",
+
+  },
+];
+
+export interface sampleNofificationType {
+  _id: string,
+  sender: {
+    avatar: string,
+    name: string
+  }
+}
+
+export const sampleNofification: sampleNofificationType[] = [
+  {
+    _id: "1",
+    sender: {
+      avatar: "https://i.pravatar.cc/150?img=1",
+      name: "rahul",
+    }
+  },
+  {
+    _id: "2",
+    sender: {
+      avatar: "https://i.pravatar.cc/150?img=1",
+      name: "rahul",
+    }
+  },
+  {
+    _id: "3",
+    sender: {
+      avatar: "https://i.pravatar.cc/150?img=1",
+      name: "rahul",
+    }
+  },
+]

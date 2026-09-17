@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import { memo, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   Avatar,
@@ -27,7 +27,7 @@ interface ChatItemType {
   ) => void;
 }
 
-export default function ChatItem({
+function ChatItem({
   avatar = [],
   name,
   _id,
@@ -65,3 +65,4 @@ export default function ChatItem({
     </Link>
   );
 }
+export default memo(ChatItem);

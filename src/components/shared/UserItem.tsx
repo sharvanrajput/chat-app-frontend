@@ -1,30 +1,42 @@
 import { Check, Plus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
+import { memo } from "react";
 
-export default function UserItem({
-  _id,
+type usertype = {
+  _id: string;
+  name: string;
+};
+
+ function UserItem({
+  user,
   handler,
   handlerIsLoading,
 }: {
-  _id: string;
+  user: usertype;
   handler: (_id: string) => void;
   handlerIsLoading: boolean;
 }) {
   return (
     <div
       className=" flex justify-between p-1 border-2 rounded-lg"
-      onClick={() => handler(_id)}
+      onClick={() => handler(user._id)}
     >
-      <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
+      <div className="flex gap-2 items-center" >
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <div>
+          <h3 className=" text-black ">{user.name || "user name"}</h3>
+        </div>
+      </div>
       <div>
-        <Button disabled={handlerIsLoading}>
+        <Button className={"bg-violet-500 rounded-full"} disabled={handlerIsLoading}>
           <Plus />
         </Button>
       </div>
     </div>
   );
 }
+export default memo(UserItem)

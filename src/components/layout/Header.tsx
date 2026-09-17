@@ -27,25 +27,30 @@ import {
   Users2,
   type LucideIcon,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { sampleNofification, sampleUsers } from "../data/SampleData";
+import NotificationITem from "../shared/NotificationITem";
+import UserItem from "../shared/UserItem";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
 import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import UserItem from "../shared/UserItem";
-import { ScrollArea } from "../ui/scroll-area";
 type DilogProviderProps = {
   Icon: LucideIcon;
   children: ReactNode;
 };
 
-const user = [1, 2, 3, 4, 5];
-const handler = () => {};
-
 export default function Header() {
   const { toggleSidebar, open, openMobile } = useSidebar();
+  const [users, setUsers] = useState(sampleUsers);
+  const [notification, setNotification] = useState(sampleNofification);
   const navigate = useNavigate();
+  const handleAddFriend = (id: string) => {};
+  const isLoadingFriendReq = false;
+  const sendReqHanler = (_id: string, accept: boolean): void => {};
+
   return (
     <nav className="flex justify-between items-baseline bg-violet-500 text-white px-3 py-2">
       <div>
@@ -73,11 +78,12 @@ export default function Header() {
 
               <ScrollArea className="h-[300px]  rounded-md border p-4">
                 <div className="space-y-2.5">
-                  {user.map((obj) => (
+                  {users.map((obj) => (
                     <UserItem
-                      _id={"asdf"}
-                      handler={handler}
-                      handlerIsLoading={false}
+                      key={obj._id}
+                      user={obj}
+                      handler={() => handleAddFriend(obj._id)}
+                      handlerIsLoading={isLoadingFriendReq}
                     />
                   ))}
                 </div>
@@ -86,6 +92,36 @@ export default function Header() {
           </TooltipTrigger>
           <TooltipContent>
             <p>Search</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger>
+            <DilogProvider Icon={Bell}>
+              <DialogHeader className="mb-3">
+                <DialogTitle>Notification</DialogTitle>
+              </DialogHeader>
+
+              <ScrollArea className="max-h-[300px]  rounded-md border p-4">
+                <div className="space-y-2.5">
+                  {notification.length > 0 ? (
+                    notification.map((obj) => (
+                      <NotificationITem
+                        key={obj._id}
+                        _id={obj._id}
+                        sender={obj.sender}
+                        handler={sendReqHanler}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-center"> 0 Notifications</div>
+                  )}
+                </div>
+              </ScrollArea>
+            </DilogProvider>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Add to library</p>
           </TooltipContent>
         </Tooltip>
 
@@ -108,31 +144,6 @@ export default function Header() {
             >
               <UserGroup className="size-4" />
             </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Add to library</p>
-          </TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <div className="bg-black  p-2  rounded-full">
-                  <Bell className="size-4" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <User /> Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings /> Setting
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </TooltipTrigger>
           <TooltipContent>
             <p>Add to library</p>

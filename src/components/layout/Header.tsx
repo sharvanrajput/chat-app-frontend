@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -18,6 +19,8 @@ import {
 import {
   Bell,
   LogOut,
+  Minus,
+  Plus,
   Search,
   Settings,
   SidebarCloseIcon,
@@ -50,7 +53,14 @@ export default function Header() {
   const handleAddFriend = (id: string) => {};
   const isLoadingFriendReq = false;
   const sendReqHanler = (_id: string, accept: boolean): void => {};
-
+  const [selectedMember, setSelectedMembers] = useState<string[]>([]);
+  const handleSelectMembers = (id: string) => {
+    setSelectedMembers((prev) =>
+      prev.includes(id) ? prev.filter((str) => id !== str) : [...prev, id],
+    );
+  };
+  const handleCrateGroup = () => {};
+  console.log(selectedMember);
   return (
     <nav className="flex justify-between items-baseline bg-violet-500 text-white px-3 py-2">
       <div>
@@ -121,18 +131,67 @@ export default function Header() {
             </DilogProvider>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Add to library</p>
+            <p>Notification</p>
           </TooltipContent>
         </Tooltip>
 
         <Tooltip>
           <TooltipTrigger>
             <DilogProvider Icon={Users2}>
-              <p>lorem </p>
+              <div>
+                <DialogHeader className="mb-3">
+                  <DialogTitle>New Group</DialogTitle>
+                </DialogHeader>
+
+                <div className="relative mb-2">
+                  <Input type="test" placeholder="Enter Group Name" />
+                </div>
+
+                <ScrollArea className="max-h-[300px]  rounded-md border p-4">
+                  <div className="space-y-2.5">
+                    {users.map((user) => (
+                      <div className=" flex justify-between p-1 border-2 rounded-lg">
+                        <div className="flex gap-2 items-center">
+                          <Avatar>
+                            <AvatarImage
+                              src="https://github.com/shadcn.png"
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h3 className=" text-black ">
+                              {user.name || "user name"}
+                            </h3>
+                          </div>
+                        </div>
+                        <div>
+                          <Button
+                            onClick={() => handleSelectMembers(user._id)}
+                            className="bg-violet-500 rounded-full"
+                          >
+                            {selectedMember.includes(user._id) ? (
+                              <Minus />
+                            ) : (
+                              <Plus />
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+                <div className="flex justify-between mt-2">
+                  <DialogClose
+                    render={<Button variant={"destructive"}>Cancel</Button>}
+                  />
+                  <Button onClick={handleCrateGroup}>Create</Button>
+                </div>
+              </div>
             </DilogProvider>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Add to library</p>
+            <p>New Group</p>
           </TooltipContent>
         </Tooltip>
 

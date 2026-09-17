@@ -168,3 +168,56 @@ export const sampleNofification: sampleNofificationType[] = [
     }
   },
 ]
+
+export type msgType = {
+  attachments: [
+    {
+      public_id: string,
+      url: string
+    }
+  ],
+  conatent: string,
+  _id: string,
+  sender: {
+    _id: string,
+    name: string
+  },
+  chat: string,
+  createdAt: string
+}
+
+
+export const sampleMsg: msgType[] = [
+  {
+    attachments: [
+      {
+        public_id: "fasdfasd",
+        url: "https://picsum.photos/seed/chat-one/200/200.jpg",
+      }
+    ],
+    conatent: "hello world",
+    _id: "asdfasdf",
+    sender: {
+      _id: "user.id",
+      name: "hero"
+    },
+    chat: "chjatid",
+    createdAt: "2026-09-17T10:41:30.630Z"
+  },
+  {
+    attachments: [
+      {
+        public_id: "fasdfasd",
+        url: "https://picsum.photos/seed/chat-two/200/200.jpg",
+      }
+    ],
+    conatent: "aap kon ho , me sharvan",
+    _id: "asdfasdf",
+    sender: {
+      _id: "123",
+      name: "hero"
+    },
+    chat: "chjatid",
+    createdAt: "2026-09-17T10:42:30.630Z"
+  }
+]

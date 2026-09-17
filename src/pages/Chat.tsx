@@ -1,7 +1,16 @@
+import { sampleMsg } from "@/components/data/SampleData";
+import Message from "@/components/shared/Message";
 import { Button } from "@/components/ui/button";
 import { Paperclip, Send } from "lucide-react";
-import { useRef, useState } from "react";
-
+import { useRef, useState, type ChangeEvent } from "react";
+export type userType = {
+  _id: string;
+  name: string;
+};
+const user = { 
+  _id:"123",
+  name:"sharvan"
+}
 export default function Chat() {
   const msgsRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -18,7 +27,7 @@ export default function Chat() {
     setMessage("");
   };
 
-  const handleAttachment = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAttachment = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (!files || files.length === 0) return;
@@ -29,11 +38,16 @@ export default function Chat() {
   return (
     <div className="w-full h-full px-2">
       {/* Messages */}
-      <div
-        ref={msgsRef}
-        className="w-full h-[80vh] overflow-y-auto p-2"
-      >
-        Show messages here
+      <div ref={msgsRef} className="w-full h-[80vh] overflow-y-auto p-2 ">
+
+      {
+
+        sampleMsg.map(i => (
+          <Message key={i._id} message={i} user={user} />
+        )) 
+      }
+
+
       </div>
 
       {/* Chat Form */}

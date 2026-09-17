@@ -11,7 +11,7 @@ export default function Layout({
   path: string;
 }) {
   return (
-    <div>
+    <>
       <SidebarProvider
         style={
           {
@@ -21,11 +21,11 @@ export default function Layout({
         }
       >
         <AppSidebar />
-        <main className="w-full">
+        <main className="w-full h-[calc(90vh)]">
           <Header />
           {user ? <Outlet /> : <Navigate to={path} />}
         </main>
       </SidebarProvider>
-    </div>
+    </>
   );
 }

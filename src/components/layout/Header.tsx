@@ -40,6 +40,7 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { transformImage } from "@/lib/features";
 type DilogProviderProps = {
   Icon: LucideIcon;
   children: ReactNode;
@@ -154,7 +155,7 @@ export default function Header() {
                         <div className="flex gap-2 items-center">
                           <Avatar>
                             <AvatarImage
-                              src="https://github.com/shadcn.png"
+                              src={transformImage(user.avatar, 100)}
                               alt="@shadcn"
                             />
                             <AvatarFallback>CN</AvatarFallback>

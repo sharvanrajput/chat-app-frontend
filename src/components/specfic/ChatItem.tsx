@@ -7,6 +7,7 @@ import {
   AvatarGroup,
   AvatarImage,
 } from "../ui/avatar";
+import { transformImage } from "@/lib/features";
 type newMessageAlertType = {
   chatId: string;
   count: number;
@@ -49,7 +50,7 @@ function ChatItem({
         <AvatarGroup>
           {avatar.map((obj) => (
             <Avatar>
-              <AvatarImage src={obj} alt="@evilrabbit" />
+              <AvatarImage src={transformImage(obj, 100)} alt="@evilrabbit" />
               <AvatarFallback>ER</AvatarFallback>
               {isOnline && !groupChat && (
                 <AvatarBadge className="bg-green-600 dark:bg-green-800" />

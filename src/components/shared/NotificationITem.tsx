@@ -3,15 +3,17 @@ import { memo } from "react";
 import type { sampleNofificationType } from "../data/SampleData";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
+import { transformImage } from "@/lib/features";
 interface handleType extends sampleNofificationType {
   handler: (id: string, accept: boolean) => void;
 }
 function NotificationITem({ sender, _id, handler }: handleType) {
+  const url = "https://github.com/shadcn.png";
   return (
     <div className=" flex justify-between p-1 border-2 rounded-lg">
       <div className="flex gap-2 items-center">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src={transformImage(url,100)} alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div>

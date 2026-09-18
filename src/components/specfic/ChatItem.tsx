@@ -8,6 +8,7 @@ import {
   AvatarImage,
 } from "../ui/avatar";
 import { transformImage } from "@/lib/features";
+import { useSidebar } from "../ui/sidebar";
 type newMessageAlertType = {
   chatId: string;
   count: number;
@@ -39,10 +40,13 @@ function ChatItem({
   index = 0,
   handleDeleteChat,
 }: ChatItemType) {
+  const { isMobile, openMobile, setOpenMobile } = useSidebar();
+
   return (
     <Link
       to={`/chat/${_id}`}
       onContextMenu={(e) => handleDeleteChat(e, _id, groupChat)}
+      onClick={() => isMobile && openMobile && setOpenMobile(false)}
     >
       <div
         className={`flex gap-2 items-center rounded-lg px-3 hover:bg-violet-100 hover:text-violet-400 py-2 ${sameSander ? "bg-violet-600 text-white" : "bg-gray-50 text-black"} `}

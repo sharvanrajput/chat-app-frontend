@@ -26,6 +26,9 @@ export default function ChatList({
   ],
   handleDeleteChat,
 }: ChatItemType) {
+
+  
+
   return (
     <div>
       {chats.map((data) => {

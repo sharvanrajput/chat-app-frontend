@@ -200,13 +200,13 @@ export default function Header() {
           <TooltipTrigger>
             <div
               className="bg-black  p-2  rounded-full"
-              onClick={() => navigate("/group")}
+              onClick={() => navigate("/group?group=true")}
             >
               <UserGroup className="size-4" />
             </div>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Add to library</p>
+            <p>My Group</p>
           </TooltipContent>
         </Tooltip>
 
@@ -247,8 +247,7 @@ export default function Header() {
     </nav>
   );
 }
-
-const DilogProvider = ({ Icon, children }: DilogProviderProps) => {
+export const DilogProvider = ({ Icon, children }: DilogProviderProps) => {
   return (
     <Dialog>
       <DialogTrigger>

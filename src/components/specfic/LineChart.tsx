@@ -1,11 +1,84 @@
-import React from 'react'
+import { TrendingUp } from "lucide-react";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
-const LineChart = () => {
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
+
+export const description = "A multiple line chart";
+
+const chartData = [
+  { month: "Sunday", desktop: 186 },
+  { month: "Monday", desktop: 18},
+  { month: "Tuestay", desktop: 106 },
+  { month: "Wednesday", desktop: 86 },
+  { month: "Thrusday", desktop: 18 },
+  { month: "Friday", desktop: 180},
+  { month: "Saturday", desktop: 136 },
+];
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "var(--chart-3)",
+  },
+} satisfies ChartConfig;
+
+export function ChartLine() {
   return (
-    <div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Line Chart - Multiple</CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <LineChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <Line
+              dataKey="desktop"
+              type="monotone"
+              stroke="var(--color-desktop)"
+              strokeWidth={2}
+              dot={false}
+            />
+            <Line
+              dataKey="mobile"
+              type="monotone"
+              stroke="var(--color-mobile)"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
+        </ChartContainer>
+      </CardContent>
       
-    </div>
-  )
+    </Card>
+  );
 }
-
-export default LineChart

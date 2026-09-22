@@ -1,3 +1,5 @@
+import { ChartLine } from "@/components/specfic/LineChart";
+import { ChartPieDonutText } from "@/components/specfic/PIeChart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,19 +15,24 @@ import moment from "moment";
 export const description = "A line chart with a label";
 export default function Dashboard() {
   return (
-    <div className="p-3">
+    <div className="p-3 space-y-3.5">
       <Card>
         <CardContent>
-          <div className="flex  items-center">
+          <div className="flex md:flex-row flex-col justify-between items-center">
             <div className="flex w-[25%] gap-2 items-center">
-              <ShieldEllipsis className="size-12" />
+              <ShieldEllipsis className="size-10 shrink-0" />
               <Input />
               <Button>Search</Button>
             </div>
-            <div>{moment().format(" dddd , MMMM Do yyyy ")} </div>
+            <div>{moment().format(" dddd , MMMM Do yyyy ")}</div>
           </div>
         </CardContent>
       </Card>
+
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-2 ">
+        <ChartLine />
+        <ChartPieDonutText />
+      </div>
 
       <div className="flex justify-between">
         <Widget Icon={User} title={"Users"} value={34} />
@@ -61,4 +68,3 @@ const Widget = ({
     </Card>
   );
 };
-

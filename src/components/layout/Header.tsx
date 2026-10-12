@@ -41,6 +41,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { transformImage } from "@/lib/features";
+import { useAppDispatch } from "@/redux/store";
+import { userNotExist } from "@/redux/slices/auth";
 type DilogProviderProps = {
   Icon: LucideIcon;
   children: ReactNode;
@@ -60,7 +62,13 @@ export default function Header() {
       prev.includes(id) ? prev.filter((str) => id !== str) : [...prev, id],
     );
   };
+  const dispatch = useAppDispatch();
   const handleCrateGroup = () => {};
+  const logout = () => {
+    localStorage.removeItem("token");
+    dispatch(userNotExist())
+  };
+
   console.log(selectedMember);
   return (
     <nav className="flex justify-between items-baseline bg-violet-500 text-white px-3 py-2">
@@ -231,7 +239,7 @@ export default function Header() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <Button variant={"destructive"} className={"w-full"}>
+                  <Button variant={"destructive"} onClick={logout} className={"w-full"}>
                     {" "}
                     <LogOut /> Logout
                   </Button>

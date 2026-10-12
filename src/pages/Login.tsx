@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { api } from "@/api/api";
 import { userExist } from "@/redux/slices/auth";
 
@@ -59,11 +59,13 @@ export default function Auth() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const { user } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate()
   const dispatch = useAppDispatch();
-  useEffect
-  if (user) {
-    return <Navigate to={"/"} />;
-  }
+  // useEffect
+
+  // if (user) {
+  //   return <Navigate to={"/"} />;
+  // }
   
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -115,6 +117,7 @@ export default function Auth() {
       const me = await api.get("/user/me");
       console.log(me.data.user);
       dispatch(userExist(me.data.user));
+      navigate("/")
       return;
     }
 

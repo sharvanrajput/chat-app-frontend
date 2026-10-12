@@ -1,8 +1,4 @@
-import {
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-} from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -15,36 +11,24 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { Navigate } from "react-router-dom";
+import { api } from "@/api/api";
+import { userExist } from "@/redux/slices/auth";
 
-// =====================================================
-// ZOD SCHEMAS
-// =====================================================
-
-// Login validation schema
 const loginSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
 
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-// Register validation schema
 const registerSchema = z
   .object({
-    name: z
-      .string()
-      .min(2, "Name must be at least 2 characters"),
+    name: z.string().min(2, "Name must be at least 2 characters"),
 
-    username: z
-      .string()
-      .min(3, "Username must be at least 3 characters"),
+    username: z.string().min(3, "Username must be at least 3 characters"),
 
-    password: z
-      .string()
-      .min(6, "Password must be at least 6 characters"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
 
     confirmPassword: z
       .string()
@@ -55,10 +39,6 @@ const registerSchema = z
     path: ["confirmPassword"],
   });
 
-// =====================================================
-// TYPES
-// =====================================================
-
 type FormValues = {
   name: string;
   username: string;
@@ -68,62 +48,43 @@ type FormValues = {
 
 type FormErrors = Record<string, string>;
 
-// =====================================================
-// COMPONENT
-// =====================================================
-
 export default function Auth() {
   // Login/Register mode
   const [isLogin, setIsLogin] = useState(true);
-
-  // Form values
   const [values, setValues] = useState<FormValues>({
     name: "",
     username: "",
     password: "",
     confirmPassword: "",
   });
-
-  // Form errors
   const [errors, setErrors] = useState<FormErrors>({});
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  useEffect
+  if (user) {
+    return <Navigate to={"/"} />;
+  }
+  
 
-  // ===================================================
-  // HANDLE INPUT CHANGE
-  // ===================================================
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Update form value
     setValues((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    // Remove error for current field
     setErrors((prev) => ({
       ...prev,
       [name]: "",
     }));
   };
 
-  // ===================================================
-  // HANDLE FORM SUBMIT
-  // ===================================================
-
-  const handleSubmit = (
-    e: FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Clear previous errors
     setErrors({});
-
-    // =================================================
-    // LOGIN
-    // =================================================
 
     if (isLogin) {
       const result = loginSchema.safeParse({
@@ -144,23 +105,18 @@ export default function Auth() {
         });
 
         setErrors(fieldErrors);
-
         return;
       }
 
       // Validation successful
       console.log("Login Data:", result.data);
-
-      // API call will go here
-      // Example:
-      // await loginUser(result.data);
-
+      const res = await api.post("/user/signin", result.data);
+      localStorage.setItem("token", res.data.token);
+      const me = await api.get("/user/me");
+      console.log(me.data.user);
+      dispatch(userExist(me.data.user));
       return;
     }
-
-    // =================================================
-    // REGISTER
-    // =================================================
 
     const result = registerSchema.safeParse(values);
 
@@ -183,15 +139,7 @@ export default function Auth() {
 
     // Validation successful
     console.log("Register Data:", result.data);
-
-    // API call will go here
-    // Example:
-    // await registerUser(result.data);
   };
-
-  // ===================================================
-  // SWITCH LOGIN / REGISTER
-  // ===================================================
 
   const handleModeChange = () => {
     setIsLogin((prev) => !prev);
@@ -208,10 +156,6 @@ export default function Auth() {
     setErrors({});
   };
 
-  // ===================================================
-  // JSX
-  // ===================================================
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-4">
       <Card className="w-full max-w-md bg-white/95 shadow-2xl">
@@ -219,9 +163,7 @@ export default function Auth() {
 
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold">
-            {isLogin
-              ? "Welcome Back 👋"
-              : "Create Account 🚀"}
+            {isLogin ? "Welcome Back 👋" : "Create Account 🚀"}
           </CardTitle>
 
           <CardDescription>
@@ -234,19 +176,14 @@ export default function Auth() {
         {/* ================= FORM ================= */}
 
         <CardContent>
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* =========================================
                 NAME - REGISTER ONLY
             ========================================= */}
 
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="name">
-                  Name
-                </Label>
+                <Label htmlFor="name">Name</Label>
 
                 <Input
                   id="name"
@@ -258,9 +195,7 @@ export default function Auth() {
                 />
 
                 {errors.name && (
-                  <p className="text-sm text-red-500">
-                    {errors.name}
-                  </p>
+                  <p className="text-sm text-red-500">{errors.name}</p>
                 )}
               </div>
             )}
@@ -270,9 +205,7 @@ export default function Auth() {
             ========================================= */}
 
             <div className="space-y-2">
-              <Label htmlFor="username">
-                Username
-              </Label>
+              <Label htmlFor="username">Username</Label>
 
               <Input
                 id="username"
@@ -284,9 +217,7 @@ export default function Auth() {
               />
 
               {errors.username && (
-                <p className="text-sm text-red-500">
-                  {errors.username}
-                </p>
+                <p className="text-sm text-red-500">{errors.username}</p>
               )}
             </div>
 
@@ -295,9 +226,7 @@ export default function Auth() {
             ========================================= */}
 
             <div className="space-y-2">
-              <Label htmlFor="password">
-                Password
-              </Label>
+              <Label htmlFor="password">Password</Label>
 
               <Input
                 id="password"
@@ -309,9 +238,7 @@ export default function Auth() {
               />
 
               {errors.password && (
-                <p className="text-sm text-red-500">
-                  {errors.password}
-                </p>
+                <p className="text-sm text-red-500">{errors.password}</p>
               )}
             </div>
 
@@ -321,9 +248,7 @@ export default function Auth() {
 
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">
-                  Confirm Password
-                </Label>
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
 
                 <Input
                   id="confirmPassword"
@@ -350,9 +275,7 @@ export default function Auth() {
               type="submit"
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
-              {isLogin
-                ? "Login"
-                : "Create Account"}
+              {isLogin ? "Login" : "Create Account"}
             </Button>
 
             {/* =========================================
@@ -362,9 +285,7 @@ export default function Auth() {
             <div className="text-center text-sm">
               {isLogin ? (
                 <>
-                  <span className="text-gray-500">
-                    Don't have an account?{" "}
-                  </span>
+                  <span className="text-gray-500">Don't have an account? </span>
 
                   <button
                     type="button"

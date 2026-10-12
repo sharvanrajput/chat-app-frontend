@@ -2,12 +2,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import { SidebarProvider } from "../ui/sidebar";
 import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
+import type { User } from "@/redux/slices/auth";
 
 export default function AdminLayout({
   user,
   path,
 }: {
-  user: boolean;
+  user: User | null | boolean;
   path: string;
 }) {
   return (

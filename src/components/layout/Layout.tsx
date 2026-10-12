@@ -2,14 +2,10 @@ import { Navigate, Outlet } from "react-router-dom";
 import { SidebarProvider } from "../ui/sidebar";
 import Header from "./Header";
 import { AppSidebar } from "./AppSidebar";
+import type { User } from "@/redux/slices/auth";
 
-export default function Layout({
-  user,
-  path,
-}: {
-  user: boolean;
-  path: string;
-}) {
+export default function Layout({ user, path }: { user: User | null; path: string }) {
+
   return (
     <>
       <SidebarProvider

@@ -1,13 +1,15 @@
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import AdminLayout from "./components/layout/AdminLayout";
 import Layout from "./components/layout/Layout";
 import Loading from "./components/shared/Loading";
-import AdminLayout from "./components/layout/AdminLayout";
-import Dashboard from "./pages/admin/Dashboard";
-import Users from "./pages/admin/Users";
 import Chats from "./pages/admin/Chats";
-import Message from "./components/shared/Message";
+import Dashboard from "./pages/admin/Dashboard";
 import Messages from "./pages/admin/Messages";
+import Users from "./pages/admin/Users";
+import { useAppDispatch, useAppSelector } from "./redux/store";
+import { userExist } from "./redux/slices/auth";
+import { api } from "./api/api";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -16,7 +18,20 @@ const Chat = lazy(() => import("./pages/Chat"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 
 export default function App() {
-  const user = true;
+  const { user } = useAppSelector((state) => state.auth);
+
+  const dispatch = useAppDispatch();
+
+  const fetchMe = async () => {
+    const me = await api.get("/user/me");
+    console.log(me.data.user);
+    dispatch(userExist(me.data.user));
+  };
+
+  useEffect(() => {
+    fetchMe();
+  }, []);
+
   return (
     <>
       <Suspense fallback={<Loading />}>
@@ -27,9 +42,9 @@ export default function App() {
             <Route path="/group" element={<Group />} />
           </Route>
 
-          <Route path="/" element={<Layout user={!user} path="/" />}>
-            <Route path="/login" element={<Login />} />
-          </Route>
+          {/* <Route path="/" element={<Layout user={!user} path="/" />}> */}
+          <Route path="/login" element={<Login />} />
+          {/* </Route> */}
 
           <Route
             path="/admin"
@@ -47,9 +62,6 @@ export default function App() {
           >
             <Route path="/admin/login" element={<AdminLogin />} />
           </Route>
-
-
-
         </Routes>
       </Suspense>
     </>

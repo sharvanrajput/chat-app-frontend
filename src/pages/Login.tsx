@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Navigate, useNavigate } from "react-router-dom";
 import { api } from "@/api/api";
 import { userExist } from "@/redux/slices/auth";
+import { User } from "lucide-react";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -57,16 +58,13 @@ export default function Auth() {
     password: "",
     confirmPassword: "",
   });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const { user } = useAppSelector((state) => state.auth);
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch();
-  // useEffect
+  const [profile, setProfile] = useState<null | File>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  // if (user) {
-  //   return <Navigate to={"/"} />;
-  // }
-  
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,6 +80,15 @@ export default function Auth() {
     }));
   };
 
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfile(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+  console.log(profile);
+  console.log(preview);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -117,7 +124,7 @@ export default function Auth() {
       const me = await api.get("/user/me");
       console.log(me.data.user);
       dispatch(userExist(me.data.user));
-      navigate("/")
+      navigate("/");
       return;
     }
 
@@ -140,8 +147,9 @@ export default function Auth() {
       return;
     }
 
-    // Validation successful
     console.log("Register Data:", result.data);
+
+    const formdata = new FormData();
   };
 
   const handleModeChange = () => {
@@ -183,6 +191,34 @@ export default function Auth() {
             {/* =========================================
                 NAME - REGISTER ONLY
             ========================================= */}
+
+            {!isLogin && (
+              <div className="space-y-2">
+                <Label
+                  htmlFor="avatar"
+                  className="border-2 relaive overflow-hidden  mx-auto   grid place-items-center h-20 w-20 rounded-full border-dashed"
+                >
+                  {!preview ? (
+                    <User className="text-gray-300" />
+                  ) : (
+                    <img src={preview}  className="object-cover h-full w-full" alt="" />
+                  )}
+
+                  <Input
+                    id="avatar"
+                    name="avatar"
+                    type="file"
+                    placeholder="Enter your name"
+                    value={values.name}
+                    className="hidden"
+                    onChange={handleFile}
+                  />
+                </Label>
+                {errors.name && (
+                  <p className="text-sm text-red-500">{errors.name}</p>
+                )}
+              </div>
+            )}
 
             {!isLogin && (
               <div className="space-y-2">

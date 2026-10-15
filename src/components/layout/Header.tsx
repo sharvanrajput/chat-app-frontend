@@ -41,8 +41,9 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { transformImage } from "@/lib/features";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { userNotExist } from "@/redux/slices/auth";
+import { api } from "@/api/api";
 type DilogProviderProps = {
   Icon: LucideIcon;
   children: ReactNode;
@@ -63,10 +64,13 @@ export default function Header() {
     );
   };
   const dispatch = useAppDispatch();
+  const {user} = useAppSelector((state) => state.auth);
   const handleCrateGroup = () => {};
-  const logout = () => {
+
+  const logout = async () => {
     localStorage.removeItem("token");
-    dispatch(userNotExist())
+    await api.post("/user/logout");
+    dispatch(userNotExist());
   };
 
   console.log(selectedMember);
@@ -223,7 +227,13 @@ export default function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage
+                    src={
+                      user
+                        ? `${user.avatar?.url}`
+                        : "https://github.com/shadcn.png"
+                    }
+                  />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
@@ -239,7 +249,11 @@ export default function Header() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <Button variant={"destructive"} onClick={logout} className={"w-full"}>
+                  <Button
+                    variant={"destructive"}
+                    onClick={logout}
+                    className={"w-full"}
+                  >
                     {" "}
                     <LogOut /> Logout
                   </Button>

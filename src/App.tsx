@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { lazy, Suspense, useLayoutEffect } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AdminLayout from "./components/layout/AdminLayout";
 import Layout from "./components/layout/Layout";
 import Loading from "./components/shared/Loading";
@@ -28,7 +28,7 @@ export default function App() {
     dispatch(userExist(me.data.user));
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchMe();
   }, []);
 
@@ -36,20 +36,18 @@ export default function App() {
     <>
       <Suspense fallback={<Loading />}>
         <Routes>
-          <Route path="/" element={<Layout user={user} path="/login" />}>
+          <Route element={<Layout user={user} path="/login" />}>
             <Route path="/" element={<Home />} />
             <Route path="/chat/:id" element={<Chat />} />
             <Route path="/group" element={<Group />} />
           </Route>
 
-          {/* <Route path="/" element={<Layout user={!user} path="/" />}> */}
-          <Route path="/login" element={<Login />} />
-          {/* </Route> */}
-
           <Route
-            path="/admin"
-            element={<AdminLayout user={user} path="/admin/login" />}
-          >
+            path="/login"
+            element={user ? <Navigate to="/" replace /> : <Login />}
+          />
+
+          <Route element={<AdminLayout user={user} path="/admin/login" />}>
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/chats" element={<Chats />} />
@@ -57,11 +55,9 @@ export default function App() {
           </Route>
 
           <Route
-            path="/admin"
-            element={<AdminLayout user={!user} path="/admin" />}
-          >
-            <Route path="/admin/login" element={<AdminLogin />} />
-          </Route>
+            path="/admin/login"
+            element={user ? <Navigate to="/admin" replace /> : <AdminLogin />}
+          />
         </Routes>
       </Suspense>
     </>

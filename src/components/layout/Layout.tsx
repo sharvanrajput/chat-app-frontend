@@ -4,8 +4,13 @@ import Header from "./Header";
 import { AppSidebar } from "./AppSidebar";
 import type { User } from "@/redux/slices/auth";
 
-export default function Layout({ user, path }: { user: User | null; path: string }) {
-
+export default function Layout({
+  user,
+  path,
+}: {
+  user: User | null;
+  path: string;
+}) {
   return (
     <>
       <SidebarProvider
@@ -19,7 +24,7 @@ export default function Layout({ user, path }: { user: User | null; path: string
         <AppSidebar />
         <main className="w-full h-[calc(90vh)]">
           <Header />
-          {user ? <Outlet /> : <Navigate to={path} />}
+          {!user ? <Navigate to={path} /> : <Outlet />}
         </main>
       </SidebarProvider>
     </>

@@ -1,7 +1,16 @@
-import axios from "axios"
+import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from "axios"
 
 export const api = axios.create({
     baseURL: "http://localhost:4000/api",
     withCredentials: true
 })
 
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+    const token = localStorage.getItem("token")
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+})
+
+ 
